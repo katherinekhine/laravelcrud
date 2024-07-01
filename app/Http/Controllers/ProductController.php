@@ -43,6 +43,8 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->save();
 
+        // here will store image
+
         return redirect()->route('products.index')->with('success', 'Product added successfully.');
     }
 
