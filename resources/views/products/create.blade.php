@@ -15,7 +15,7 @@
                 <div class="card-header bg-dark">
                     <h3 class="text-white">Create Product</h3>
                 </div>
-                <form action="{{ route ('products.store') }}" method="POST">
+                <form enctype="multipart/form-data" action="{{ route ('products.store') }}" method="POST">
                  @csrf
                     <div class="card-body">
                         <div class="mb-3">

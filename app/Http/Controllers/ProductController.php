@@ -29,6 +29,10 @@ class ProductController extends Controller
             'price' => 'required|numeric',
         ];
 
+        if ($request->image != "") {
+            $rules['image'] = 'image';
+        }
+
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
@@ -43,7 +47,19 @@ class ProductController extends Controller
         $product->description = $request->description;
         $product->save();
 
-        // here will store image
+        if ($request->image != "") {
+            // here will store image
+            $image = $request->image;
+            $ext = $image->getClientOriginalExtension();
+            $imageName = time() . '.' . $ext; //Unique image name
+
+            // Save image to products directory
+            $image->move(public_path('uploads/products'), $imageName);
+
+            // Save image name in database
+            $product->image = $imageName;
+            $product->save();
+        }
 
         return redirect()->route('products.index')->with('success', 'Product added successfully.');
     }
