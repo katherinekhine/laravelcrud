@@ -22,6 +22,35 @@
                 <div class="card-header bg-dark">
                     <h3 class="text-white">Products</h3>
                 </div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <th>ID</th>
+                            <th></th>
+                            <th>Name</th>
+                            <th>SKU</th>
+                            <th>Price</th>
+                            <th>Created At</th>
+                            <th>Action</th>
+                        </tr>
+                        @if ($products->isNotEmpty())
+                          @foreach ($products as $product)
+                              <tr>
+                                <td>{{$product->id}}</td>
+                                <td></td>
+                                <td>{{ $product->name}}</td>
+                                <td>{{$product->sku}}</td>
+                                <td>{{$product->price}}</td>
+                                <td>{{\Carbon\Carbon::parse($product->created_at)->format('d M, Y')}}</td>
+                                <td>
+                                    <a href="#" class="btn btn-dark">Edit</a>
+                                    <a href="#" class="btn btn-danger">Delete</a>
+                                </td>
+                              </tr>
+                          @endforeach  
+                        @endif
+                    </table>
+                </div>
             </div>
         </div>
     </div>
