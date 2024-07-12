@@ -37,10 +37,14 @@
                           @foreach ($products as $product)
                               <tr>
                                 <td>{{$product->id}}</td>
-                                <td></td>
+                                <td>
+                                    @if ($product->image != '')
+                                       <img width="55" src="{{asset('uploads/products/'.$product->image)}}" alt=""> 
+                                    @endif
+                                </td>
                                 <td>{{ $product->name}}</td>
                                 <td>{{$product->sku}}</td>
-                                <td>{{$product->price}}</td>
+                                <td>$ {{$product->price}}</td>
                                 <td>{{\Carbon\Carbon::parse($product->created_at)->format('d M, Y')}}</td>
                                 <td>
                                     <a href="#" class="btn btn-dark">Edit</a>
