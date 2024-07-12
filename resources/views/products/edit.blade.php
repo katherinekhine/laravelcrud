@@ -15,8 +15,9 @@
                 <div class="card-header bg-dark">
                     <h3 class="text-white">Edit Product</h3>
                 </div>
-                <form enctype="multipart/form-data" action="{{ route ('products.store') }}" method="POST">
+                <form enctype="multipart/form-data" action="{{ route('products.update', $product->id) }}" method="POST">
                  @csrf
+                 @method('PUT')
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="" class="form-label h5">Name</label>

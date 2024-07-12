@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -77,8 +78,51 @@ class ProductController extends Controller
     }
 
     // This method will update products
-    public function update()
+    public function update($id, Request $request)
     {
+        $product = Product::findOrFail($id);
+        $rules = [
+            'name' => 'required|min:5',
+            'sku' => 'required|min:3',
+            'price' => 'required|numeric',
+        ];
+
+        if ($request->image != "") {
+            $rules['image'] = 'image';
+        }
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->route('products.edit', $product->id)->withInput()->withErrors($validator);
+        }
+
+        // here will update product 
+        $product->name = $request->name;
+        $product->sku = $request->sku;
+        $product->price = $request->price;
+        $product->description = $request->description;
+        $product->save();
+
+        if ($request->image != "") {
+
+            // Delete old image
+            File::delete(public_path('uploads/products/' . $product->image));
+
+            // here will store image
+            $image = $request->image;
+            $ext = $image->getClientOriginalExtension();
+            $imageName = time() . '.' . $ext; //Unique image name
+
+            // Save image to products directory
+            $image->move(public_path('uploads/products'), $imageName);
+
+            // Save image name in database
+            $product->image = $imageName;
+            $product->save();
+        }
+
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }
 
     // This method will delete product
